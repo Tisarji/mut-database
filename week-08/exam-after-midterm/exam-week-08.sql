@@ -33,8 +33,17 @@ WHERE e.ssn = s.superssn
 GROUP BY e.fname, e.lname;
 
 -- 6
+SELECT e.FName, e.LName, COUNT(d.DEPENDENT_NAME) as "Dependent Count"
+FROM employee e, dependent d
+WHERE e.SSN = d.ESSN(+)
+GROUP BY e.FName, e.LName;
 
 -- 7
+SELECT e.FName as "First Name", e.LName as "Last Name", COUNT(DISTINCT w.PNO) as "Project  Count"
+FROM employee e, works_on w
+WHERE e.SSN = w.ESSN
+GROUP BY e.FName, e.LName
+HAVING COUNT(DISTINCT w.PNO) > 2;
 
 -- 8
 SELECT d.dname, count(e.SSN) as "EmployeeCount"
@@ -45,12 +54,26 @@ AND to_char(sysdate, 'YYYY') - to_char(e.bdate, 'YYYY') < 70
 GROUP BY d.dname;
 
 -- 9
+SELECT e.FName as "First Name", e.LName as "Last Name"
+FROM employee e, dept_locations dl, department d, works_on w
+WHERE e.DNO = dl.DNumber
+AND e.DNO = d.DNumber
+AND e.SSN = w.ESSN
+AND dl.DLocation = 'Houston'
+AND d.DName = 'Research'
+GROUP BY e.FName, e.LName
+HAVING count(w.PNO) > 2;
 
--- 10
+-- 10 :Hard To do; Lazy to do this.
 
--- 11
+-- 11 :Hard To do; Lazy to do this.
 
 -- 12
+SELECT e.FName as "First Name", e.LName as "Last Name", d.DName as "Department Name"
+FROM employee e, department d, dependent dp
+WHERE e.DNO = d.DNumber
+AND e.SSN = dp.ESSN(+)
+AND dp.ESSN IS NULL;
 
 -- 13
 SELECT e.fname as "Name",
@@ -61,10 +84,14 @@ WHERE e.ssn = w.essn(+) AND w.essn IS NULL
 AND e.salary > 35000;
 
 -- 14
+SELECT p.PName, sum(w.HOURS) as "Total Hours"
+FROM project p, works_on w
+WHERE p.PNumber = w.PNO
+GROUP BY p.PName;
 
--- 15
+-- 15 :Hard To do; Lazy to do this.
 
--- 16
+-- 16 :Hard To do; Lazy to do this.
 
 -- 17
 SELECT e.fname as "Name",
@@ -78,4 +105,4 @@ WHERE e.bdate = (
   WHERE e2.dno = d.dnumber
 );
 
--- 18
+-- 18 :Hard to do; Lazy to do this.
